@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LiveLinkz</title>
+</head>
+<body>
+  <h1>LiveLinkz</h1>
+  <form id="urlForm">
+    <input type="text" id="longUrl" placeholder="Enter URL" required>
+    <button type="submit">Shorten URL</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('urlForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const longUrl = document.getElementById('longUrl').value;
+      const response = await fetch('/shorten', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ longUrl })
+      });
+      const data = await response.json();
+      document.getElementById('result').innerHTML = `Shortened URL: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+    });
+  </script>
+</body>
+</html>
