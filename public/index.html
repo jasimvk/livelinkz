@@ -17,13 +17,23 @@
     document.getElementById('urlForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const longUrl = document.getElementById('longUrl').value;
-      const response = await fetch('/shorten', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ longUrl })
-      });
-      const data = await response.json();
-      document.getElementById('result').innerHTML = `Shortened URL: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+      try {
+        const response = await fetch('/shorten', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ longUrl })
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById('result').innerHTML = `Shortened URL: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>`;
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('result').textContent = 'An error occurred. Please try again.';
+      }
     });
   </script>
 </body>
